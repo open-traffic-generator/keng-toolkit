@@ -45,14 +45,14 @@ images:
     # path: ghcr.io/open-traffic-generator/keng-controller
     # alternate paths:
     # controller from internal artifactory
-    path: docker-virtual-athena.artifactorylbj.it.keysight.com/keng-controller
+    path: ghcr.io/open-traffic-generator/keng-controller
     tag: 1.62.0-1
   ixia-c-one:
     # production path
     # path: ghcr.io/open-traffic-generator/ixia-c-one
     # alternate paths:
     # ixia-c-one from internal artifactory
-    path: docker-virtual-athena.artifactorylbj.it.keysight.com/ixia-c-one
+    path: ghcr.io/open-traffic-generator/ixia-c-one
     tag: 1.62.0-1
   ixia-c-traffic-engine:
     # production path
@@ -66,7 +66,7 @@ images:
     # path: ghcr.io/open-traffic-generator/ixia-c-protocol-engine
     # alternate paths:
     # protocol-engine from internal artifactory
-    path: docker-local-nas.artifactorylbj.it.keysight.com/packages_rustic/l23_protocols
+    path: ghcr.io/open-traffic-generator/ixia-c-protocol-engine
     tag: 1.00.0.537
   otg-gnmi-server:
     # production path
@@ -77,14 +77,14 @@ images:
     # path: ghcr.io/open-traffic-generator/keng-layer23-hw-server
     # alternate paths:
     # layer23-hw-server from internal artifactory
-    path: docker-virtual-athena.artifactorylbj.it.keysight.com/keng-layer23-hw-server
+    path: ghcr.io/open-traffic-generator/keng-layer23-hw-server
     tag: 1.62.0-1
   keng-app-usage-reporter:
     # production path
     # path: ghcr.io/open-traffic-generator/keng-app-usage-reporter
     # alternate paths:
     # app-usage-reporter from internal artifactory
-    path: docker-virtual-athena.artifactory.it.keysight.com/app-usage-reporter
+    path: ghcr.io/open-traffic-generator/keng-app-usage-reporter
     tag: 0.0.1-52
   arista-ceos:
     path: ghcr.io/open-traffic-generator/ceos
@@ -106,13 +106,6 @@ timeouts:
 license-servers:
   vm-license:
     - "ixiacls-5.ccu.is.keysight.com"
-ports:
-  uhd:
-    - "uhd://tf2-qa1.lbj.is.keysight.com:7531;11+obox0.lbj.is.keysight.com:30796"
-    - "uhd://tf2-qa1.lbj.is.keysight.com:7531;12+obox0.lbj.is.keysight.com:31378"
-  hw-chassis:
-    - "xgssdl-711954.ccu.is.keysight.com;1;1"
-    - "xgssdl-711954.ccu.is.keysight.com;1;5"
 paths:
   # downloaded from http://pki.keysight.com/Keysight_Root-pem.crt
   keysight-crt: resources/keysight-root.crt

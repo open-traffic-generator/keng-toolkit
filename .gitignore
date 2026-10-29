@@ -5,7 +5,7 @@ deployments/k8s/metallb.yaml
 deployments/k8s/meshnet-cni/
 .*.yaml
 .*.txt
-ixia-c-automation.json
 [0-9].*
 *.log
 auth.yaml
+__pycache__

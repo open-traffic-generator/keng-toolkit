@@ -1,0 +1,121 @@
+opts:
+  kind-auth: true
+  # controls installation of keysight certificates inside all nodes of the
+  # kind cluster post cluster creation. Supported values:
+  #   auto  - (default) probe each node's TLS trust to ghcr.io and only
+  #           install certs on nodes where the probe indicates the certs
+  #           are not already trusted
+  #   true  - force-install certs unconditionally on every node, skipping
+  #           the probe
+  #   false - never install certs, skipping the probe
+  kind-certs: "auto"
+  # when enabled, k9s shall be installed, allowing access to
+  # interactive terminal UI for managing kubernetes resources
+  get-k9s: true
+  check-latest-versions: true
+releases:
+  k9s: v0.51.0
+  # used by get_kne_src() (setup_new()'s bridge flow) only. Unset/absent
+  # (default) tracks kne's `main`; set to a tag/commit to pin the whole
+  # bundle (kind+metallb+meshnet+manifests) to that kne release
+  # kne-src: v0.3.1
+  # Keep containerlab on a Docker-API-1.42-compatible release. Newer builds
+  # use Docker networking features that require API v1.44+ and fail on the
+  # current host daemon.
+  # apt repo channel used by install_kubectl(); also reported by
+  # check_latest_versions
+  kubectl: v1.37
+  snappi: 1.62.0
+  kne: v0.1.11
+# information needed to pull or load most of the container images
+# used throughout script execution;
+# each image shall have at least three attributes:
+# - path: path to be used for container image
+# - tag: tag to be used for container image
+# - preload: a boolean indicating whether images shall be automatically
+#           pulled inside all cluster nodes during pod creation (when false)
+#           or images shall be pulled on the host (outside cluster) and
+#           loaded to all cluster nodes thereafter before pod creation (when true)
+images:
+  keng-operator:
+    path: ghcr.io/open-traffic-generator/keng-operator
+    tag: 0.4.4
+  keng-controller:
+    # production path
+    # path: ghcr.io/open-traffic-generator/keng-controller
+    # alternate paths:
+    # controller from internal artifactory
+    path: docker-virtual-athena.artifactorylbj.it.keysight.com/keng-controller
+    tag: 1.62.0-1
+  ixia-c-one:
+    # production path
+    # path: ghcr.io/open-traffic-generator/ixia-c-one
+    # alternate paths:
+    # ixia-c-one from internal artifactory
+    path: docker-virtual-athena.artifactorylbj.it.keysight.com/ixia-c-one
+    tag: 1.62.0-1
+  ixia-c-traffic-engine:
+    # production path
+    # path: ghcr.io/open-traffic-generator/ixia-c-traffic-engine
+    # alternate paths:
+    # traffic-engine from internal artifactory
+    path: ghcr.io/open-traffic-generator/ixia-c-traffic-engine
+    tag: 1.8.0.544
+  ixia-c-protocol-engine:
+    # production path
+    # path: ghcr.io/open-traffic-generator/ixia-c-protocol-engine
+    # alternate paths:
+    # protocol-engine from internal artifactory
+    path: docker-local-nas.artifactorylbj.it.keysight.com/packages_rustic/l23_protocols
+    tag: 1.00.0.537
+  otg-gnmi-server:
+    # production path
+    path: ghcr.io/open-traffic-generator/otg-gnmi-server
+    tag: 1.62.0
+  keng-layer23-hw-server:
+    # production path
+    # path: ghcr.io/open-traffic-generator/keng-layer23-hw-server
+    # alternate paths:
+    # layer23-hw-server from internal artifactory
+    path: docker-virtual-athena.artifactorylbj.it.keysight.com/keng-layer23-hw-server
+    tag: 1.62.0-1
+  keng-app-usage-reporter:
+    # production path
+    # path: ghcr.io/open-traffic-generator/keng-app-usage-reporter
+    # alternate paths:
+    # app-usage-reporter from internal artifactory
+    path: docker-virtual-athena.artifactory.it.keysight.com/app-usage-reporter
+    tag: 0.0.1-52
+  arista-ceos:
+    path: ghcr.io/open-traffic-generator/ceos
+    tag: 4.33.1f
+  arista-ceos-operator:
+    path: ghcr.io/aristanetworks/arista-ceoslab-operator
+    tag: v2.1.2
+sources:
+  kind: sigs.k8s.io/kind
+  k9s: github.com/derailed/k9s
+  containerlab: https://get.containerlab.dev
+  keng-operator: https://github.com/open-traffic-generator/keng-operator/releases/download/v$(configq .images.keng-operator.tag)/ixiatg-operator.yaml
+  arista-ceos-operator: https://github.com/aristanetworks/arista-ceoslab-operator/config/default?ref=$(configq .images.arista-ceos-operator.tag)
+timeouts:
+  kind: 300
+  pod-ready: 300
+  namespace-cleanup: 300
+  sock-ready: 60
+license-servers:
+  vm-license:
+    - "ixiacls-5.ccu.is.keysight.com"
+ports:
+  uhd:
+    - "uhd://tf2-qa1.lbj.is.keysight.com:7531;11+obox0.lbj.is.keysight.com:30796"
+    - "uhd://tf2-qa1.lbj.is.keysight.com:7531;12+obox0.lbj.is.keysight.com:31378"
+  hw-chassis:
+    - "xgssdl-711954.ccu.is.keysight.com;1;1"
+    - "xgssdl-711954.ccu.is.keysight.com;1;5"
+paths:
+  # downloaded from http://pki.keysight.com/Keysight_Root-pem.crt
+  keysight-crt: resources/keysight-root.crt
+  docker-config: deployments/k8s/docker-config.json
+  ixia-c-config: deployments/k8s/ixia-c-config.yaml
+  secrets: deployments/k8s/secrets

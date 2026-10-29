@@ -1,0 +1,5 @@
+opts:
+  # when provided, users won't be prompted for ghcr.io
+  # credentials during script execution
+  github-user: ""
+  github-pat: ""

@@ -197,8 +197,8 @@ def test_quickstart(port_a: str = "veth1", port_z: str = "veth2", location: str 
 
 def main():
     parser = argparse.ArgumentParser(description="Run the CP-DP B2B snappi example.")
-    parser.add_argument("--port-a", default="veth1", help="Name of port A interface")
-    parser.add_argument("--port-z", default="veth2", help="Name of port Z interface")
+    parser.add_argument("--port-a", default="eth1", help="Name of port A interface")
+    parser.add_argument("--port-z", default="eth2", help="Name of port Z interface")
     parser.add_argument("--location", default="https://localhost:8443", help="OTG API endpoint URL")
     args = parser.parse_args()
     test_quickstart(args.port_a, args.port_z, args.location)

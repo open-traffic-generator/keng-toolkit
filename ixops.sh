@@ -982,13 +982,28 @@ wait_for_services() {
             then
                 continue
             fi
-            h=$(kubectl get service ${s} -n ixia-c -o 'jsonpath={.status.loadBalancer.ingress[0].ip}')
+
+            h=$(get_external_ip ${n} ${s})
+            if [ -z "${h}" ]
+            then
+                log "Service/${s} in namespace ${n} has not yet received an external IP; retrying until MetalLB assigns one..."
+                for _ in $(seq 1 30)
+                do
+                    h=$(get_external_ip ${n} ${s})
+                    [ -n "${h}" ] && break
+                    sleep 2
+                done
+            fi
+            if [ -z "${h}" ]
+            then
+                err_exit "Service/${s} in namespace ${n} never received an external IP" 1
+            fi
+
             log "Waiting for service/${s} in namespace ${n} with external IP ${h} ..."
             i=0
-            for p in $(kubectl get service ${s} -n ixia-c -o 'jsonpath={.spec.ports[*].port}')
+            for p in $(kubectl get service ${s} -n ${n} -o 'jsonpath={.spec.ports[*].port}')
             do
-                name=$(kubectl get service ${s} -n ixia-c -o "jsonpath={.spec.ports[${i}].name}")
-                # echo $name
+                name=$(kubectl get service ${s} -n ${n} -o "jsonpath={.spec.ports[${i}].name}")
                 case "$name" in 
                 *ssl*)
                     continue
@@ -1628,7 +1643,7 @@ rm_docker_ixhw_topo() {
 get_external_ip() {
     ns=${1}
     svc=${2}
-    kubectl get services ${svc} -n ${ns} -o 'jsonpath={.status.loadBalancer.ingress[0].ip}'
+    kubectl get service ${svc} -n ${ns} -o 'jsonpath={.status.loadBalancer.ingress[0].ip}' 2>/dev/null
 }
 
 

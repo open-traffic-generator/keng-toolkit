@@ -105,7 +105,7 @@ timeouts:
   sock-ready: 60
 license-servers:
   vm-license:
-    - "ixiacls-5.ccu.is.keysight.com"
+    - "<license-server-address>"
 paths:
   # downloaded from http://pki.keysight.com/Keysight_Root-pem.crt
   keysight-crt: resources/keysight-root.crt

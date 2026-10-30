@@ -86,7 +86,7 @@ Make sure the OTG controller is running and the ports exist in your environment.
 
 ```bash
 cd examples/cp_dp_b2b
-python3 quickstart_cp_dp.py --port-a "xgssdl-711954.ccu.is.keysight.com;1;1" --port-z "xgssdl-711954.ccu.is.keysight.com;1;5"
+python3 quickstart_cp_dp.py --port-a "<chassis-ip>;<port>;<card>" --port-z "<chassis-ip>;<port>;<card>"
 ```
 
 If your lab uses different port names, replace `eth1` and `eth2` with the actual interfaces exposed by your environment.

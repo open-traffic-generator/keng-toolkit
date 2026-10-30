@@ -684,40 +684,12 @@ rm_kind_clusters() {
     rm -rf "${DOT_KUBE}"
 }
 
-_kind_install_cert_on_node() {
-    # $1 = node name. Skips the cp/restart if this node's cert already matches
-    # (checksum, since `cmp` can't compare a host file to one inside the node's
-    # container filesystem) -- restarting containerd bounces every pod on the node.
-    local node want_sum have_sum
-    node="${1}"
-    want_sum=$(sha256sum "$(configq .paths.keysight-crt)" | awk '{print $1}')
-    have_sum=$(docker exec ${node} sha256sum /usr/local/share/ca-certificates/keysight-root.crt 2>/dev/null | awk '{print $1}')
-    if [ -n "${have_sum}" ] && [ "${want_sum}" = "${have_sum}" ]
-    then
-        log "Cert already installed on node ${node}, skipping"
-        return 0
-    fi
-    log "Installing certs and restarting containerd on node ${node} ..."
-    docker cp $(configq .paths.keysight-crt) ${node}:/usr/local/share/ca-certificates/keysight-root.crt \
-    && docker exec ${node} update-ca-certificates \
-    && docker exec ${node} systemctl restart containerd \
-    && log "Successfully installed certs and restarted containerd on node ${node}."
-}
-
 kind_install_certs() {
     log "Checking if cert installation is needed on kind nodes"
     case "$(configq .opts.kind-certs)" in
         false )
             log "kind-certs is set to 'false', skipping cert installation on kind nodes"
             return 0
-        ;;
-        true )
-            log "kind-certs is set to 'true', force-installing certs on all kind nodes ..."
-            for node in $(kubectl get nodes -o=jsonpath='{.items[*].metadata.name}')
-            do
-                _kind_install_cert_on_node "${node}"
-            done
-            log "Successfully installed certs on all kind nodes !"
         ;;
         * )
             log "kind-certs is set to 'auto', probing TLS trust on each kind node ..."
@@ -728,8 +700,7 @@ kind_install_certs() {
                 then
                     log "Node ${node} already trusts required certs, skipping installation."
                 else
-                    log "Node ${node} does not trust required certs, installing certs ..."
-                    _kind_install_cert_on_node "${node}"
+                    log "Node ${node} does not trust required certs, install certs! ..."
                 fi
             done
             log "Finished checking/installing certs on all kind nodes !"

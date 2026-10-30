@@ -101,8 +101,6 @@ license-servers:
   vm-license:
     - "<license-server-address>"
 paths:
-  # downloaded from http://pki.keysight.com/Keysight_Root-pem.crt
-  keysight-crt: resources/keysight-root.crt
   docker-config: deployments/k8s/docker-config.json
   ixia-c-config: deployments/k8s/ixia-c-config.yaml
   secrets: deployments/k8s/secrets

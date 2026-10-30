@@ -86,12 +86,6 @@ images:
     # app-usage-reporter from internal artifactory
     path: ghcr.io/open-traffic-generator/keng-app-usage-reporter
     tag: 0.0.1-52
-  arista-ceos:
-    path: ghcr.io/open-traffic-generator/ceos
-    tag: 4.33.1f
-  arista-ceos-operator:
-    path: ghcr.io/aristanetworks/arista-ceoslab-operator
-    tag: v2.1.2
 sources:
   kind: sigs.k8s.io/kind
   k9s: github.com/derailed/k9s

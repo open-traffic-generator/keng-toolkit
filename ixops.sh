@@ -1719,24 +1719,6 @@ remove_version_yaml() {
     fi
 }
 
-deploy_license_server_container() {
-    keng_license_server_img=$(configq .images.keng-license-server.path):$(configq .images.keng-license-server.tag)
-    # remove any stale container first -- docker run --name fails otherwise
-    docker rm -f keng-license-server > /dev/null 2>&1 || true
-    docker pull ${keng_license_server_img} \
-    && docker run -d                                        \
-        --net=container:keng-controller                     \
-        --name=keng-license-server                          \
-        ${keng_license_server_img}                          \
-        --accept-eula                                       \
-        --debug   
-}
-
-remove_license_server_container() {
-    docker stop keng-license-server && docker rm keng-license-server
-}
-
-
 help() {
     grep "() {" ${0} | cut -d\  -f1
 }

@@ -1,0 +1,52 @@
+version: "2"
+
+services:
+  keng-layer23-hw-server:
+    image: $(configq .images.keng-layer23-hw-server.path):$(configq .images.keng-layer23-hw-server.tag)
+    container_name: keng-layer23-hw-server
+    restart: always
+    ports:
+      - "5001:5001"
+    command:
+      - "dotnet"
+      - "otg-ixhw.dll"
+      - "--trace"
+      - "--log-level"
+      - "trace"
+  otg-gnmi-server:
+    image: $(configq .images.otg-gnmi-server.path):$(configq .images.otg-gnmi-server.tag)
+    container_name: otg-gnmi-server
+    profiles: ["all", "gnmi"]
+    restart: always
+    ports:
+      - "50051:50051"
+    depends_on:
+      keng-controller:
+        condition: service_started
+    command:
+      - "-http-server"
+      - "https://keng-controller:8443"
+      - "--debug"
+  keng-controller:
+    image: $(configq .images.keng-controller.path):$(configq .images.keng-controller.tag)
+    container_name: keng-controller
+    restart: always
+    ports:
+      - "8443:8443"
+      - "40051:40051"
+    depends_on:
+      keng-layer23-hw-server:
+        condition: service_started
+    command:
+      - "--accept-eula"
+      - "--debug"
+      - "--keng-layer23-hw-server"
+      - "keng-layer23-hw-server:5001"
+      - "--otel-collector"
+      - "jaeger:4318"
+    environment:
+      - GRPC_GO_LOG_VERBOSITY_LEVEL=99
+      - GRPC_GO_LOG_SEVERITY_LEVEL=info
+      - LICENSE_SERVERS=LIC_SERVERS
+      - SHOW_DEBUG_SPANS=TRUE
+      - ENABLE_STREAM_WARNINGS=True

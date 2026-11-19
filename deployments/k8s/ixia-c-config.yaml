@@ -1,0 +1,40 @@
+# DISABLE_VERSION_CHECK is intentionally disabled
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: ixiatg-release-config
+    namespace: ixiatg-op-system
+data:
+    versions: |
+        {
+        "release": "local",
+        "images": [
+                {
+                    "name": "controller",
+                    "path": "$(configq .images.keng-controller.path)",
+                    "tag": "$(configq .images.keng-controller.tag)",
+                    "env": {
+                        "TRACE": "true",
+                        "ENABLE_STREAM_WARNINGS": "True"
+                    }
+                },
+                {
+                    "name": "gnmi-server",
+                    "path": "$(configq .images.otg-gnmi-server.path)",
+                    "tag": "$(configq .images.otg-gnmi-server.tag)"
+                },
+                {
+                    "name": "traffic-engine",
+                    "path": "$(configq .images.ixia-c-traffic-engine.path)",
+                    "tag": "$(configq .images.ixia-c-traffic-engine.tag)",
+                    "env": {
+                        "OPT_ADAPTIVE_CPU_USAGE": "Yes"
+                    }
+                },
+                {
+                    "name": "protocol-engine",
+                    "path": "$(configq .images.ixia-c-protocol-engine.path)",
+                    "tag": "$(configq .images.ixia-c-protocol-engine.tag)"
+                }
+            ]
+        }

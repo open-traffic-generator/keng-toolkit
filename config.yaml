@@ -46,14 +46,14 @@ images:
     # alternate paths:
     # controller from internal artifactory
     path: ghcr.io/open-traffic-generator/keng-controller
-    tag: 1.62.0-1
+    tag: 1.62.0-7
   ixia-c-one:
     # production path
     # path: ghcr.io/open-traffic-generator/ixia-c-one
     # alternate paths:
     # ixia-c-one from internal artifactory
     path: ghcr.io/open-traffic-generator/ixia-c-one
-    tag: 1.62.0-1
+    tag: 1.62.0-7
   ixia-c-traffic-engine:
     # production path
     # path: ghcr.io/open-traffic-generator/ixia-c-traffic-engine
@@ -67,7 +67,7 @@ images:
     # alternate paths:
     # protocol-engine from internal artifactory
     path: ghcr.io/open-traffic-generator/ixia-c-protocol-engine
-    tag: 1.00.0.537
+    tag: 1.00.0.542
   otg-gnmi-server:
     # production path
     path: ghcr.io/open-traffic-generator/otg-gnmi-server
@@ -78,7 +78,7 @@ images:
     # alternate paths:
     # layer23-hw-server from internal artifactory
     path: ghcr.io/open-traffic-generator/keng-layer23-hw-server
-    tag: 1.62.0-1
+    tag: 1.62.0-4
   keng-app-usage-reporter:
     # production path
     # path: ghcr.io/open-traffic-generator/keng-app-usage-reporter
